@@ -33,48 +33,72 @@
                 android:hint="@string/productTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"/>
-            <EditText android:id="@+id/productDescription"
-                android:hint="@string/productDescription"
-                android:layout_width="match_parent"
-                android:layout_height="200sp"
-                android:inputType="textMultiLine"
-                android:layout_gravity="center|left|top"
-                android:gravity="left|top" />
+                android:textSize="40sp"
+                />
 
-            <EditText android:id="@+id/productCost"
-                android:hint="@string/productCost"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:maxLength="5"/>
+                android:layout_height="wrap_content">
 
-            <EditText android:id="@+id/productQuantity"
-                android:hint="@string/productQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="5"/>
+                <EditText android:id="@+id/productDescription"
+                    android:hint="@string/productDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="200sp"
+                    android:inputType="textMultiLine"
+                    android:layout_gravity="center|left|top"
+                    android:gravity="left|top" />
 
-            <TextView android:id="@+id/productTotalCost"
-                android:hint="@string/productTotalCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:editable="false" />
+                <EditText android:id="@+id/productCost"
+                    android:hint="@string/productCost"
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/productQuantity"
+                    android:layout_below="@+id/productDescription"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/enterProduct"
-                android:onClick="createProduct"
-                android:background="@color/colorPrimaryButton"
-                android:textColor="#FFFFFF"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clearProduct"
-                android:onClick="reset"/>
+                <EditText android:id="@+id/productQuantity"
+                    android:hint="@string/productQuantity"
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:layout_below="@+id/productDescription"
+                    android:layout_alignParentRight="true"
+                    />
+
+                <TextView android:id="@+id/productTotalCost"
+                    android:hint="@string/productTotalCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:editable="false"
+                    android:textSize="40dp"
+                    android:fontFamily="monospace"
+                    android:layout_below="@+id/productCost"
+                    android:textColor="@color/colorPrimaryButton"/>
+
+                <Button
+                    android:id="@+id/enterProduct"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enterProduct"
+                    android:onClick="createProduct"
+                    android:background="@color/colorPrimaryButton"
+                    android:textColor="#FFFFFF"
+                    android:layout_below="@+id/productTotalCost"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/resetForm"/>
+                <Button
+                    android:id="@+id/resetForm"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clearProduct"
+                    android:onClick="reset"
+                    android:layout_below="@+id/productTotalCost"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 
