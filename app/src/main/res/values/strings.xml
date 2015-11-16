@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ProductApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="productTitle">Product Name</string>
+    <string name="productDescription">Product Description</string>
+    <string name="productCost">Product Cost</string>
+    <string name="productQuantity">Quantity</string>
+    <string name="productTotalCost">Total Cost</string>
+    <string name="enterProduct">Enter Product</string>
+    <string name="clearProduct">Reset</string>
+    <string name="title_activity_list">Activity List</string>
+    <string name="addProduct">Add a new product!</string>
+</resources>
