@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".CreateProductActivity"
             android:label="@string/title_activity_list"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
