@@ -1,5 +1,6 @@
 package com.example.jasonwong94.productapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,9 +13,21 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-    EditText titleText ,descriptionText ,costText, quantityText, totalCostText;
+import java.io.FileOutputStream;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
+public class CreateProductActivity extends AppCompatActivity {
+    private final static String productCreated = "Product succesfully created succesfully!";
+    private EditText titleText ,descriptionText ,costText, quantityText;
+    private TextView totalCostText;
+    private Locale locale;
+    private Currency currency;
+    private String currencySymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +38,19 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-
         titleText = (EditText) findViewById( R.id.productTitle );
         descriptionText = (EditText) findViewById( R.id.productDescription );
         costText = (EditText) findViewById( R.id.productCost );
         quantityText = (EditText) findViewById( R.id.productQuantity );
-        totalCostText = (EditText) findViewById( R.id.productTotalCost );
+        totalCostText = (TextView) findViewById( R.id.productTotalCost );
 
         costText.addTextChangedListener( calculateWatcher );
         quantityText.addTextChangedListener( calculateWatcher );
+
+        locale = Locale.getDefault();
+        currency = Currency.getInstance(locale);
+        currencySymbol = currency.getSymbol( locale );
+        costText.setText( currencySymbol );
     }
 
     @Override
@@ -61,15 +78,22 @@ public class MainActivity extends AppCompatActivity {
     private void calculateCost(){
         String costString = costText.getText().toString();
         String quantityString = quantityText.getText().toString();
+        double cost;
 
-        if( !costString.isEmpty() && !quantityString.isEmpty() ){
+        NumberFormat totalCostFormat = NumberFormat.getCurrencyInstance( locale );
+
+        try{
+            cost = totalCostFormat.parse( costString ).doubleValue();
+
+            if( !costString.isEmpty() && !quantityString.isEmpty() ){
 //            calculate cost only if both parameters have a numeric value (inputType: number )
-            float cost = Float.valueOf ( costString );
-            int quantity = Integer.valueOf( quantityString );
+                int quantity = Integer.valueOf( quantityString );
+                double totalCost = cost * quantity;
 
-            float totalCost = cost * quantity;
-
-            totalCostText.setText( String.valueOf( totalCost ) );
+                totalCostText.setText( String.valueOf( totalCostFormat.format( totalCost ) ) );
+            }
+        } catch ( java.text.ParseException e ){
+            e.printStackTrace();
         }
     };
 
@@ -96,8 +120,34 @@ public class MainActivity extends AppCompatActivity {
 //        clears out the form
         titleText.setText( "" );
         descriptionText.setText( "" );
-        costText.setText( "" );
+        costText.setText( currencySymbol );
         quantityText.setText( "" );
         totalCostText.setText( "" );
     }
+
+    public void createProduct( View view ){
+        //file contents
+        String productName = titleText.getText().toString();
+        String []documentContent = {
+                descriptionText.getText().toString(),
+                costText.getText().toString(),
+                quantityText.getText().toString(),
+                totalCostText.getText().toString()
+        };
+
+        //write to file
+        try {
+            FileOutputStream outputStream = openFileOutput( productName, Context.MODE_PRIVATE );
+            for( int index = 0; index< documentContent.length; index ++ ){
+                outputStream.write( documentContent[index].getBytes() );
+            }
+            outputStream.close();
+        } catch( Exception e ){
+            e.printStackTrace();
+        }
+
+        //success notification!
+        Toast.makeText( CreateProductActivity.this, productCreated, Toast.LENGTH_SHORT).show();
+    }
+
 }
