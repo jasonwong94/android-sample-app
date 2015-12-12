@@ -9,11 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jasonwong94 on 15-11-17.
  */
-public class FeedReaderDBHelper extends SQLiteOpenHelper {
+public class ProductDBHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
     private static final String SQL_CREATE_TABLE =
@@ -40,7 +42,7 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Products.db";
 
-    public FeedReaderDBHelper( Context context ){
+    public ProductDBHelper( Context context ){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -49,8 +51,8 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_PRODUCT_ID= "productId";
         public static final String COLUMN_NAME_PRODUCT_TITLE= "productTitle";
         public static final String COLUMN_NAME_PRODUCT_DESCRIPTION= "productDescription";
-        public static final String COLUMN_NAME_PRODUCT_COST= "productCost";
         public static final String COLUMN_NAME_PRODUCT_QUANTITY= "productQuantity";
+        public static final String COLUMN_NAME_PRODUCT_COST= "productCost";
         public static final String COLUMN_NAME_PRODUCT_TOTAL_COST= "productTotalCost";
         public static final String COLUMN_NAME_PRODUCT_CREATED= "productCreatedOn";
 
@@ -60,7 +62,7 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate( SQLiteDatabase db ){
-        db.execSQL( SQL_CREATE_TABLE );
+        db.execSQL(SQL_CREATE_TABLE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
@@ -71,27 +73,58 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void insertProduct( String title, String description, String cost, String quantity, String totalCost ){
+    public void insertProduct( String title, String description, String cost, String quantity, String totalCost, String dateCreated ){
         db = this.getWritableDatabase();
         ContentValues productContent = new ContentValues();
         productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_TITLE, title);
         productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_DESCRIPTION, description );
-        productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_COST, cost );
         productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_QUANTITY, quantity );
-        productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_TOTAL_COST, totalCost );
-        productContent.put(FeedEntry.COLUMN_NAME_PRODUCT_CREATED, new Timestamp(System.currentTimeMillis()).toString());
+        productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_COST, cost );
+        productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_TOTAL_COST, totalCost);
+        productContent.put(FeedEntry.COLUMN_NAME_PRODUCT_CREATED, dateCreated);
 
     }
 
-    public Cursor getDataById( int id ){
+    public ProductClass getDataById( int id ){
         db = this.getReadableDatabase();
         final String GET_ALL = SQL_QUERY + " WHERE " + FeedEntry.COLUMN_NAME_PRODUCT_ID + " = " + id;
-        return db.rawQuery( GET_ALL, null );
+        Cursor cursor = db.rawQuery( GET_ALL, null);
+        if( cursor != null ){
+            return new ProductClass(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getInt(3),
+                cursor.getInt(4),
+                cursor.getDouble(5),
+                cursor.getString(6)
+            );
+        }
+        return null;
     }
 
-    public Cursor getAllData(){
+    public List<ProductClass> getAllData(){
         db = this.getReadableDatabase();
-        return db.rawQuery( SQL_QUERY , null );
+        Cursor cursor = db.rawQuery( SQL_QUERY , null );
+        ArrayList results = new ArrayList<ProductClass>();
+
+        if ( cursor != null ){
+            do{
+                ProductClass product = new ProductClass(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getInt(4),
+                    cursor.getDouble(5),
+                    cursor.getString(6)
+
+                );
+                results.add( product );
+            }
+            while( cursor.moveToNext());
+        }
+        return results;
     }
 
     public void deleteProduct( int id ){
