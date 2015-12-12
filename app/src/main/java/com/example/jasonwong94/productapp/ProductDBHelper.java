@@ -82,6 +82,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
         productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_COST, cost );
         productContent.put( FeedEntry.COLUMN_NAME_PRODUCT_TOTAL_COST, totalCost);
         productContent.put(FeedEntry.COLUMN_NAME_PRODUCT_CREATED, dateCreated);
+        db.insert( FeedEntry.TABLE_NAME, null, productContent );
 
     }
 
@@ -108,7 +109,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery( SQL_QUERY , null );
         ArrayList results = new ArrayList<ProductClass>();
 
-        if ( cursor != null ){
+        if ( cursor.moveToFirst() ){
             do{
                 ProductClass product = new ProductClass(
                     cursor.getInt(0),
