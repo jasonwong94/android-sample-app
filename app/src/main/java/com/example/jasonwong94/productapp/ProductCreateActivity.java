@@ -1,10 +1,7 @@
 package com.example.jasonwong94.productapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,18 +13,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
-public class CreateProductActivity extends AppCompatActivity {
-    private final static String productCreated = "Product succesfully created succesfully!";
-    private EditText titleText ,descriptionText ,costText, quantityText;
-    private TextView totalCostText;
-    private Locale locale;
-    private Currency currency;
-    private String currencySymbol;
+public class ProductCreateActivity extends AppCompatActivity {
+    final static String productCreated = "Product succesfully created succesfully!";
+    EditText titleText ,descriptionText ,costText, quantityText;
+    TextView totalCostText;
+    Locale locale;
+    Currency currency;
+    String currencySymbol;
+    ProductDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +35,25 @@ public class CreateProductActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
+        dbHelper = new ProductDBHelper( ProductCreateActivity.this );
 
+        //UI input fields
         titleText = (EditText) findViewById( R.id.productTitle );
         descriptionText = (EditText) findViewById( R.id.productDescription );
         costText = (EditText) findViewById( R.id.productCost );
         quantityText = (EditText) findViewById( R.id.productQuantity );
         totalCostText = (TextView) findViewById( R.id.productTotalCost );
 
+        //events
         costText.addTextChangedListener( calculateWatcher );
         quantityText.addTextChangedListener( calculateWatcher );
 
+        //locale/system configuration
         locale = Locale.getDefault();
         currency = Currency.getInstance(locale);
-        currencySymbol = currency.getSymbol( locale );
+        currencySymbol = currency.getSymbol(locale);
         costText.setText( currencySymbol );
+
     }
 
     @Override
@@ -126,28 +129,18 @@ public class CreateProductActivity extends AppCompatActivity {
     }
 
     public void createProduct( View view ){
-        //file contents
-        String productName = titleText.getText().toString();
-        String []documentContent = {
+        //write to database
+        dbHelper.insertProduct(
+                titleText.getText().toString(),
                 descriptionText.getText().toString(),
                 costText.getText().toString(),
                 quantityText.getText().toString(),
-                totalCostText.getText().toString()
-        };
-
-        //write to file
-        try {
-            FileOutputStream outputStream = openFileOutput( productName, Context.MODE_PRIVATE );
-            for( int index = 0; index< documentContent.length; index ++ ){
-                outputStream.write( documentContent[index].getBytes() );
-            }
-            outputStream.close();
-        } catch( Exception e ){
-            e.printStackTrace();
-        }
+                totalCostText.getText().toString(),
+                DateFormat.getInstance().toString()
+        );
 
         //success notification!
-        Toast.makeText( CreateProductActivity.this, productCreated, Toast.LENGTH_SHORT).show();
+        Toast.makeText( ProductCreateActivity.this, productCreated, Toast.LENGTH_SHORT).show();
     }
 
 }
