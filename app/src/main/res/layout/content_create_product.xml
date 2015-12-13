@@ -30,7 +30,7 @@
             android:layout_weight="2">
 
             <EditText android:id="@+id/productTitle"
-                android:hint="@string/productTitle"
+                android:hint="@string/product_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="40sp"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText android:id="@+id/productDescription"
-                    android:hint="@string/productDescription"
+                    android:hint="@string/product_description"
                     android:layout_width="match_parent"
                     android:layout_height="200sp"
                     android:inputType="textMultiLine"
@@ -49,7 +49,7 @@
                     android:gravity="left|top" />
 
                 <EditText android:id="@+id/productCost"
-                    android:hint="@string/productCost"
+                    android:hint="@string/product_cost"
                     android:layout_width="96dp"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
@@ -59,7 +59,7 @@
                     android:layout_below="@+id/productDescription"/>
 
                 <EditText android:id="@+id/productQuantity"
-                    android:hint="@string/productQuantity"
+                    android:hint="@string/product_quantity"
                     android:layout_width="96dp"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -69,7 +69,7 @@
                     />
 
                 <TextView android:id="@+id/productTotalCost"
-                    android:hint="@string/productTotalCost"
+                    android:hint="@string/product_total_cost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
@@ -83,7 +83,7 @@
                     android:id="@+id/enterProduct"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/enterProduct"
+                    android:text="@string/enter_product"
                     android:onClick="createProduct"
                     android:background="@color/colorPrimaryButton"
                     android:textColor="#FFFFFF"
@@ -94,7 +94,7 @@
                     android:id="@+id/resetForm"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/clearProduct"
+                    android:text="@string/clear_product"
                     android:onClick="reset"
                     android:layout_below="@+id/productTotalCost"
                     android:layout_alignParentRight="true" />
