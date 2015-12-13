@@ -14,13 +14,12 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ProductCreateActivity"
-            android:label="@string/title_activity_list"
+            android:label="@string/add_product"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
